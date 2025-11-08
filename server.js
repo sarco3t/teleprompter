@@ -13,7 +13,13 @@ app.use(cors({ origin: '*' }));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/remote.html');
+  // If there's an 'id' query parameter, serve the remote control page
+  if (req.query.id) {
+    res.sendFile(__dirname + '/remote.html');
+  } else {
+    // Otherwise serve the main teleprompter app
+    res.sendFile(__dirname + '/index.html');
+  }
 });
 
 io.on('connection', function(socket) {
@@ -35,4 +41,6 @@ io.on('connection', function(socket) {
   });
 });
 
-http.listen(3000, function() {});
+http.listen(3000, '0.0.0.0', function () {
+  console.log('Server listening on http://0.0.0.0:3000');
+});
