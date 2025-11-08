@@ -1018,11 +1018,15 @@ var TelePrompter = (function() {
       $code.innerHTML = '';
       socket.emit('connectToRemote', 'REMOTE_' + remote);
 
-      $elm.remoteURL.text((window.location.hostname === 'promptr.tv') ? 'https://promptr.tv/remote' : 'http://' + window.location.hostname + ':3000');
+      // Use the actual hostname/IP that the user is accessing
+      var displayHost = window.location.hostname;
+      var displayPort = window.location.port || '3000';
+
+      $elm.remoteURL.text((window.location.hostname === 'promptr.tv') ? 'https://promptr.tv/remote' : 'http://' + displayHost + ':' + displayPort);
 
       var url = (window.location.hostname === 'promptr.tv') ?
         'https://promptr.tv/remote?id=' + remote :
-        'http://' + window.location.hostname + ':3000/?id=' + remote;
+        'http://' + displayHost + ':' + displayPort + '/remote.html?id=' + remote;
 
       new QRCode($code, url);
       $elm.remoteID.text(remote);
